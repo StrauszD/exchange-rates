@@ -1,11 +1,10 @@
 import traceback
 from datetime import datetime
-import pytz
 import requests
 import logging
 
 from entities.rate_entity import Rate
-from settings import BANXICO_API_KEY, BANXICO_SERIES, TIMEZONE
+from settings import BANXICO_API_KEY, BANXICO_SERIES
 
 
 class BanxicoService:
@@ -37,8 +36,7 @@ class BanxicoService:
 
     @staticmethod
     def __make_request():
-        timezone = pytz.timezone(TIMEZONE)
-        today = datetime.now(tz=timezone).strftime('%Y-%m-%d')
+        today = datetime.today().strftime('%Y-%m-%d')
         uri = f'https://www.banxico.org.mx/SieAPIRest/service/v1/series/{BANXICO_SERIES}/datos/{today}/{today}?token={BANXICO_API_KEY}'
 
         return requests.request('GET', uri)
