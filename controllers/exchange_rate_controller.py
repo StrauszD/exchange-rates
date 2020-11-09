@@ -4,8 +4,8 @@ from flask import jsonify, Blueprint
 from flask_cors import cross_origin
 from settings import BASE_ROUTE
 from services.exchange_rate_service import ExchangeRateService
-from utils.auth0_utils import requires_auth
-from utils.ratelimit_utils import rate_limit
+from decorators.auth0_decorator import requires_auth
+from decorators.rate_limit_decorator import rate_limit
 
 exchange_rate_blueprint = Blueprint('exchange_rate_blueprint', 'exchange_rate_blueprint')
 

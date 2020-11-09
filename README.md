@@ -46,6 +46,11 @@ Then run the application:
 python3 app.py
 ```
 
+To run the tests:
+```shell script
+$ python -m unittest discover tests
+```
+
 ## Usage
 This micro-service has two endpoints:
 
@@ -93,7 +98,7 @@ This micro-service has two endpoints:
     --header 'User: 1'
     ```
 
-* Endpoint `{{host}}/api/v1/exchange-rate/token, [GET]`
+* **Endpoint `{{host}}/api/v1/exchange-rate/token, [GET]`**
     
     This endpoint returns an Auth0 token to access the previous endpoint
     
