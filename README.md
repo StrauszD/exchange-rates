@@ -84,6 +84,14 @@ This micro-service has two endpoints:
         }
     }
     ```
+  
+    cURL:
+    ```shell script
+    curl --location --request GET '{{host}}/api/v1/exchange-rate/usd-rates' \
+    --header 'Content-Type: application/json' \
+    --header 'Authorization: Bearer <token>' \
+    --header 'User: 1'
+    ```
 
 * Endpoint `{{host}}/api/v1/exchange-rate/token, [GET]`
     
@@ -96,6 +104,11 @@ This micro-service has two endpoints:
         "expires_in": 86400,
         "token_type": "Bearer"
     }
+    ````
+  
+  cURL:
+  ````shell script
+    curl --location --request GET '{{host}}/api/v1/exchange-rate/token'
     ````
 
 ## Author
