@@ -1,8 +1,9 @@
 from flask import Flask, jsonify
 import logging
-from blueprints.auth_blueprint import auth_blueprint
-from blueprints.exchange_rate_blueprint import exchange_rate_blueprint
+from controllers.auth_controller import auth_blueprint
+from controllers.exchange_rate_controller import exchange_rate_blueprint
 from entities.auth_error import AuthError
+from entities.rate_limit_error import RateLimitError
 
 app = Flask(__name__)
 app.register_blueprint(exchange_rate_blueprint)
@@ -10,6 +11,7 @@ app.register_blueprint(auth_blueprint)
 
 
 @app.errorhandler(AuthError)
+@app.errorhandler(RateLimitError)
 def handle_auth_error(ex):
     response = jsonify(ex.error)
     response.status_code = ex.status_code

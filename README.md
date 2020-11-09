@@ -9,63 +9,94 @@ This API returns exchange rates according to different sources.
 
 ## Built With
 
+- [Auth0 - Secure access for everyone](https://auth0.com/)
 - [BeautifulSoup - Library that makes it easy to scrape information from web pages.](https://pypi.org/project/beautifulsoup4/)
-- [Flask - Flask is a lightweight WSGI web application framework.](http://flask.palletsprojects.com/en/1.1.x/)
 - [Docker - Container Framework](https://www.docker.com/)
+- [Flask - Lightweight WSGI web application framework.](http://flask.palletsprojects.com/en/1.1.x/)
+- [Redis - Open source in-memory data structure store](https://redis.io/)
 
 
 ## Deployment
-To deploy you have to set the following environment variables
+To run the project locally you have to follow the following instructions 
 
+Set the following environment variables:
+
+```
 FIXER_API_KEY=
 
 BANXICO_API_KEY=
 
 BANXICO_SERIES=SF43718
 
-TIMEZONE=America/Mexico_City
+AUTH0_CLIENT_ID=
 
-First build the image as this:
+AUTH0_CLIENT_SECRET=
 
-```bash
-docker build --force-rm -t exchange-rates .
+REDIS_USRL=
 ```
 
-Then run the image:
+Then initialize API requirements:
 
-For Linux:
 ```bash
-docker run -d -p 8080:8080 --env-file=.env --restart=always --name=exchange-rates exchange-rates
+docker-compose up
+```
+
+Then run the application:
+```bash
+python3 app.py
 ```
 
 ## Usage
-This micro-service has one endpoint
+This micro-service has two endpoints:
 
-Endpoint `{{host}}/api/v1/exchange-rate/usd-rates, [GET]`
+* **Endpoint `{{host}}/api/v1/exchange-rate/usd-rates, [GET]`**
+   
+   API calls limited to 15 in 3 minutes per user
+   
+   This endpoint returns the USD to MXN values for the current day.
 
-This endpoint returns the USD to MXN values for the current day.
+   Banxico API does not return information on weekends so it will return the values in null when consulted on a weekend
 
-Banxico API does not return information on weekends so it will return the values in null when consulted on a weekend
+   Headers:
+   ````json
+   {
+      "Authorization": "Bearer <token>",
+      "User": "<user>" 
+   }
+   ````
 
-Response body:
-```json
-{
-    "rates": {
-        "banxico": {
-            "last_updated": "2020-11-07T00:00:00",
-            "value": 20.76
-        },
-        "diario_oficial": {
-            "last_updated": "2020-11-07T00:00:00",
-            "value": 20.76
-        },
-        "fixer": {
-            "last_updated": "2020-11-07T21:03:05",
-            "value": 20.58
+   Response body:
+   ```json
+    {
+        "rates": {
+            "banxico": {
+                "last_updated": "2020-11-07T00:00:00",
+                "value": 20.76
+            },
+            "diario_oficial": {
+                "last_updated": "2020-11-07T00:00:00",
+                "value": 20.76
+            },
+            "fixer": {
+                "last_updated": "2020-11-07T21:03:05",
+                "value": 20.58
+            }
         }
     }
-}
-```
+    ```
+
+* Endpoint `{{host}}/api/v1/exchange-rate/token, [GET]`
+    
+    This endpoint returns an Auth0 token to access the previous endpoint
+    
+    Response Body:
+    ````json
+    {
+        "access_token": "token",
+        "expires_in": 86400,
+        "token_type": "Bearer"
+    }
+    ````
 
 ## Author
 - Daniel Strausz - danst.1199@gmail.com
